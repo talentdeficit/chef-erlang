@@ -1,6 +1,6 @@
 # chef-erlang (v0.1) #
 
-a chef recipe for erlenv
+a chef recipe for erlang
 
 ## usage ##
 
@@ -12,17 +12,36 @@ attribute list. for example:
 ```ruby
 node.default['erlang']['releases'] = [
 	{ 
-		'release' => 'r16b'
-	},
-  {
-    'release' => 'r15b03-1'
-  }
+    {
+      "git_url" => "http://github.com/erlang/otp",
+      "version" => "OTP_R16B",
+      "install_dir" => "/home/talentdeficit/.erlenv/releases/r16b",
+      "skip_apps" => [
+        "cosTime",
+        "cosEvent",
+        "cosEventDomain",
+        "cosFileTransfer",
+        "cosNotification",
+        "cosProperty",
+        "cosTransactions",
+        "orber"
+      ],
+      "config_flags" => [
+        "--without-javac"
+      ]
+    },
+    {
+      "git_url" => "http://github.com/erlang/otp",
+      "version" => "OTP_R15B03-1",
+      "install_dir" => "/home/talentdeficit/.erlenv/releases/r15b03-1",
+      "rebar" => false
+    }
 ]
 ```
 
-this will install `r16b` and `r15b03-1` in the default location
+this will install `r16b` and `r15b03-1` in the specified locations
 
-the following attributes are also available to override:
+the following attributes are available to override:
 
 * `installdir`
   the dir to install `erlang` to. this just sets `--prefix` in the
@@ -31,11 +50,12 @@ the following attributes are also available to override:
   the url of the git repository to clone the release from
 * `version`
   a git reference to install
-* `skip`
+* `skip_apps`
   a list of applications to skip during compilation
-* `config`
+* `config_flags`
   a list of flags to pass to the configure script
-
+* `rebar`
+  whether to install rebar, `true` or `false`
 
 ## license ##
 
