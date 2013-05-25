@@ -28,41 +28,36 @@ end
 action :create do 
   install_dir = new_resource.install_dir || node['erlang']['install_dir']
 
-  otp_url = new_resource.otp_url || node['erlang']['otp_url']
-  release = new_resource.release || node['erlang']['release']
-  skip_apps = new_resource.skip_apps || node['erlang']['skip_apps']
-  config_flags = new_resource.config_flags || node['erlang']['config_flags']
+  git_url = new_resource.git_url || node['erlang']['rebar_url']
+  version = new_resource.version || node['erlang']['rebar_version']
   user = new_resource.user
   group = new_resource.group
   
   cache_path = Chef::Config['file_cache_path']
   
-  if FileTest.exists? "#{install_dir}/bin"
-    Chef::Log.info "#{new_resource.install_dir} already exists"
+  if FileTest.exists? "#{install_dir}/bin/rebar"
+    Chef::Log.info "rebar already exists for #{install_dir}"
   else
-    converge_by("Create #{release} in #{install_dir}") do
-      
-      git "erlang otp" do
+    converge_by("Create #{version} in #{install_dir}") do
+      git "rebar for #{install_dir}" do
         user user
         group group
-        repository otp_url
-        destination "#{cache_path}/otp"
+        repository git_url
+        reference version
+        destination "#{cache_path}/rebar"
         action :sync
       end
-      
-      bash "install #{release} to #{install_dir}" do
+  
+      bash "install rebar to #{install_dir}/bin" do
         user user
         group group
-        code <<-EOS
-cp -r #{cache_path}/otp #{cache_path}/#{release}
-cd #{cache_path}/#{release}
-git checkout #{release}
-./otp_build autoconf
-./configure --prefix=#{install_dir} #{config_flags}
-touch lib/{#{skip_apps}}/SKIP
-make && make install
-EOS
-      end
+        code <<-EOH
+cp -r #{cache_path}/rebar #{cache_path}/rebar-#{version}
+cd #{cache_path}/rebar-#{version}
+#{install_dir}/bin/escript bootstrap
+cp rebar #{install_dir}/bin
+EOH
+      end      
     end
   end
 end
@@ -70,12 +65,11 @@ end
 action :delete do
   install_dir = new_resource.install_dir || node['erlang']['install_dir']
   
-  if !FileTest.exists? "#{install_dir}/bin/erl"
-    Chef::Log.info "#{new_resource} not installed"
+  if !FileTest.exists? "#{install_dir}/bin/rebar"
+    Chef::Log.info "#{new_resource} doesn't exist"
   else
-    converge_by("Delete #{release} from #{install_dir}") do
-      directory "#{install_dir}" do
-        recursive true
+    converge_by("Delete rebar from #{install_dir}") do
+      file "#{install_dir}/bin/rebar" do
         action :delete
       end
     end

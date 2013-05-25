@@ -20,11 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-default['erlang']['releases'] = []
+default['erlang']['releases'] = [{}]
 
-default['erlang']['git_url'] = "http://github.com/erlang/otp"
-default['erlang']['version'] = "OTP_R16B"
+default['erlang']['otp_url'] = "https://github.com/erlang/otp"
+default['erlang']['release'] = "OTP_R16B"
+
+default['erlang']['rebar_url'] = "https://github.com/rebar/rebar"
+default['erlang']['rebar_version'] = "HEAD"
+
 default['erlang']['install_dir'] = "/usr/local/"
 default['erlang']['skip_apps'] = ""
 default['erlang']['config_flags'] = ""
-default['erlang']['rebar'] = true
+default['erlang']['rebar'] = false

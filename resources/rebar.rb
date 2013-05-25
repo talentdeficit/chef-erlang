@@ -24,10 +24,8 @@ actions :create, :delete
 
 default_action :create
 
-attribute :prefix, :kind_of => String
-attribute :otp_url, :kind_of => String
-attribute :release, :kind_of => String, :name_attribute => true
-attribute :skip_apps
-attribute :config_flags
+attribute :prefix, :kind_of => String, :name_attribute => true
+attribute :rebar_url, :kind_of => String
+attribute :rebar_version, :kind_of => String
 attribute :user, :kind_of => String
 attribute :group, :kind_of => String
