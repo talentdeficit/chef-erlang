@@ -25,8 +25,8 @@ actions :create, :delete
 default_action :create
 
 attribute :prefix, :kind_of => String
-attribute :otp_url, :kind_of => String
-attribute :release, :kind_of => String, :name_attribute => true
+attribute :git_url, :kind_of => String
+attribute :ref, :kind_of => String, :name_attribute => true
 attribute :skip_apps
 attribute :config_flags
 attribute :user, :kind_of => String

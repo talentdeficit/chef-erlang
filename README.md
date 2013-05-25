@@ -15,7 +15,7 @@ node.default['erlang']['releases'] = [
     {
       "git_url" => "http://github.com/erlang/otp",
       "version" => "OTP_R16B",
-      "install_dir" => "/home/talentdeficit/.erlenv/releases/r16b",
+      "prefix" => "/home/talentdeficit/.erlenv/releases/r16b",
       "skip_apps" => [
         "cosTime",
         "cosEvent",
@@ -33,7 +33,7 @@ node.default['erlang']['releases'] = [
     {
       "git_url" => "http://github.com/erlang/otp",
       "version" => "OTP_R15B03-1",
-      "install_dir" => "/home/talentdeficit/.erlenv/releases/r15b03-1",
+      "prefix" => "/home/talentdeficit/.erlenv/releases/r15b03-1",
       "rebar" => false
     }
 ]

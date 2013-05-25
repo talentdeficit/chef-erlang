@@ -26,10 +26,10 @@ def whyrun_supported?
 end
 
 action :create do 
-  install_dir = new_resource.install_dir || node['erlang']['install_dir']
+  prefix = new_resource.prefix || node['erlang']['prefix']
 
-  otp_url = new_resource.otp_url || node['erlang']['otp_url']
-  release = new_resource.release || node['erlang']['release']
+  git_url = new_resource.git_url || node['erlang']['otp_git_url']
+  ref = new_resource.ref || node['erlang']['otp_git_ref']
   skip_apps = new_resource.skip_apps || node['erlang']['skip_apps']
   config_flags = new_resource.config_flags || node['erlang']['config_flags']
   user = new_resource.user
@@ -37,29 +37,31 @@ action :create do
   
   cache_path = Chef::Config['file_cache_path']
   
-  if FileTest.exists? "#{install_dir}/bin"
-    Chef::Log.info "#{new_resource.install_dir} already exists"
+  if FileTest.exists? "#{prefix}/bin/erl"
+    Chef::Log.info "#{prefix}/bin/erl already exists"
   else
-    converge_by("Create #{release} in #{install_dir}") do
+    converge_by("Create #{ref} in #{prefix}") do
       
       git "erlang otp" do
         user user
         group group
-        repository otp_url
+        repository git_url
         destination "#{cache_path}/otp"
         action :sync
       end
       
-      bash "install #{release} to #{install_dir}" do
+      bash "install #{ref} to #{prefix}" do
         user user
         group group
         code <<-EOS
-cp -r #{cache_path}/otp #{cache_path}/#{release}
-cd #{cache_path}/#{release}
-git checkout #{release}
+cp -r #{cache_path}/otp #{cache_path}/#{ref}
+cd #{cache_path}/#{ref}
+git checkout #{ref}
 ./otp_build autoconf
-./configure --prefix=#{install_dir} #{config_flags}
-touch lib/{#{skip_apps}}/SKIP
+./configure --prefix=#{prefix} #{config_flags}
+if [ -n #{skip_apps} ]; then
+  touch lib/{#{skip_apps}}/SKIP
+fi
 make && make install
 EOS
       end
@@ -68,13 +70,13 @@ EOS
 end
 
 action :delete do
-  install_dir = new_resource.install_dir || node['erlang']['install_dir']
+  prefix = new_resource.prefix || node['erlang']['prefix']
   
-  if !FileTest.exists? "#{install_dir}/bin/erl"
+  if !FileTest.exists? "#{prefix}/bin/erl"
     Chef::Log.info "#{new_resource} not installed"
   else
-    converge_by("Delete #{release} from #{install_dir}") do
-      directory "#{install_dir}" do
+    converge_by("Delete #{ref} from #{prefix}") do
+      directory "#{prefix}" do
         recursive true
         action :delete
       end

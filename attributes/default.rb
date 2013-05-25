@@ -22,13 +22,13 @@
 
 default['erlang']['releases'] = [{}]
 
-default['erlang']['otp_url'] = "https://github.com/erlang/otp"
-default['erlang']['release'] = "OTP_R16B"
+default['erlang']['otp_git_url'] = "https://github.com/erlang/otp"
+default['erlang']['otp_git_ref'] = "OTP_R16B"
 
-default['erlang']['rebar_url'] = "https://github.com/rebar/rebar"
-default['erlang']['rebar_version'] = "HEAD"
+default['erlang']['rebar_git_url'] = "https://github.com/rebar/rebar"
+default['erlang']['rebar_git_ref'] = "HEAD"
 
-default['erlang']['install_dir'] = "/usr/local/"
-default['erlang']['skip_apps'] = ""
-default['erlang']['config_flags'] = ""
+default['erlang']['prefix'] = "/usr/local"
+default['erlang']['skip_apps'] = [""]
+default['erlang']['config_flags'] = [""]
 default['erlang']['rebar'] = false

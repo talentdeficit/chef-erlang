@@ -26,36 +26,36 @@ def whyrun_supported?
 end
 
 action :create do 
-  install_dir = new_resource.install_dir || node['erlang']['install_dir']
+  prefix = new_resource.prefix || node['erlang']['prefix']
 
-  git_url = new_resource.git_url || node['erlang']['rebar_url']
-  version = new_resource.version || node['erlang']['rebar_version']
+  git_url = new_resource.git_url || node['erlang']['rebar_git_url']
+  ref = new_resource.ref || node['erlang']['rebar_git_ref']
   user = new_resource.user
   group = new_resource.group
   
   cache_path = Chef::Config['file_cache_path']
   
-  if FileTest.exists? "#{install_dir}/bin/rebar"
-    Chef::Log.info "rebar already exists for #{install_dir}"
+  if FileTest.exists? "#{prefix}/bin/rebar"
+    Chef::Log.info "rebar already exists for #{prefix}"
   else
-    converge_by("Create #{version} in #{install_dir}") do
-      git "rebar for #{install_dir}" do
+    converge_by("Create #{ref} in #{prefix}") do
+      git "rebar for #{prefix}" do
         user user
         group group
         repository git_url
-        reference version
+        reference ref
         destination "#{cache_path}/rebar"
         action :sync
       end
   
-      bash "install rebar to #{install_dir}/bin" do
+      bash "install rebar to #{prefix}/bin" do
         user user
         group group
         code <<-EOH
-cp -r #{cache_path}/rebar #{cache_path}/rebar-#{version}
-cd #{cache_path}/rebar-#{version}
-#{install_dir}/bin/escript bootstrap
-cp rebar #{install_dir}/bin
+cp -r #{cache_path}/rebar #{cache_path}/rebar-#{ref}
+cd #{cache_path}/rebar-#{ref}
+#{prefix}/bin/escript bootstrap
+cp rebar #{prefix}/bin
 EOH
       end      
     end
@@ -63,13 +63,13 @@ EOH
 end
 
 action :delete do
-  install_dir = new_resource.install_dir || node['erlang']['install_dir']
+  prefix = new_resource.prefix || node['erlang']['prefix']
   
-  if !FileTest.exists? "#{install_dir}/bin/rebar"
+  if !FileTest.exists? "#{prefix}/bin/rebar"
     Chef::Log.info "#{new_resource} doesn't exist"
   else
-    converge_by("Delete rebar from #{install_dir}") do
-      file "#{install_dir}/bin/rebar" do
+    converge_by("Delete rebar from #{prefix}") do
+      file "#{prefix}/bin/rebar" do
         action :delete
       end
     end

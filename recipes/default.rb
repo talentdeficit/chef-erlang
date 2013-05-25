@@ -43,21 +43,21 @@ prereqs.each do |pkg|
 end
 
 Array(node['erlang']['releases']).each do |r|
-  prefix = r['install_dir'] || node['erlang']['install_dir']
+  prefix = r['prefix'] || node['erlang']['prefix']
   
   cache_path = Chef::Config['file_cache_path']
 
   erlang "#{prefix}" do
-    git_url r['otp_url'] || node['erlang']['otp_url']
-    version r['otp_release'] || node['erlang']['otp_release']
-    skip_apps r['skip_apps'].join(",") || node['erlang']['skip_apps']
-    config_flags r['config_flags'].join(" ") || node['erlang']['config_flags']
+    git_url r['otp_git_url'] || node['erlang']['otp_git_url']
+    ref r['otp_git_ref'] || node['erlang']['otp_git_ref']
+    skip_apps (r['skip_apps'] || node['erlang']['skip_apps']).join(",")
+    config_flags (r['config_flags'] || node['erlang']['config_flags']).join(" ")
   end
   
   if r['rebar'] || node['erlang']['rebar']
     rebar "#{prefix}" do
-      git_url r['rebar_url'] || node['erlang']['rebar_url']
-      version r['rebar_version'] || node['erlang']['rebar_version']
+      git_url r['rebar_git_url'] || node['erlang']['rebar_git_url']
+      ref r['rebar_git_ref'] || node['erlang']['rebar_git_ref']
     end  
   end
 end
