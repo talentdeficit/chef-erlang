@@ -13,7 +13,6 @@ attribute list. for example:
 node.default['erlang']['releases'] = [
 	{ 
     {
-      "git_url" => "http://github.com/erlang/otp",
       "version" => "OTP_R16B",
       "prefix" => "/home/talentdeficit/.erlenv/releases/r16b",
       "skip_apps" => [
@@ -31,7 +30,6 @@ node.default['erlang']['releases'] = [
       ]
     },
     {
-      "git_url" => "http://github.com/erlang/otp",
       "version" => "OTP_R15B03-1",
       "prefix" => "/home/talentdeficit/.erlenv/releases/r15b03-1",
       "rebar" => false
@@ -41,15 +39,22 @@ node.default['erlang']['releases'] = [
 
 this will install `r16b` and `r15b03-1` in the specified locations
 
+leaving `releases` empty will result in installing `r16b` in the `/usr/local`
+with the default configure options
+
 the following attributes are available to override:
 
-* `installdir`
-  the dir to install `erlang` to. this just sets `--prefix` in the
+* `prefix`
+  the dir to install `erlang` to. this sets `--prefix` in the
   configure script
-* `git_url`
+* `otp_git_url`
   the url of the git repository to clone the release from
-* `version`
-  a git reference to install
+* `rebar_git_url`
+  the url of the git repository to clone rebar from
+* `otp_git_ref`
+  the git reference to checkout from the otp git repo
+* `rebar_git_ref`
+  the git reference to checkout from the rebar git repo
 * `skip_apps`
   a list of applications to skip during compilation
 * `config_flags`
