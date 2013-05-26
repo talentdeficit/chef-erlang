@@ -43,13 +43,13 @@ prereqs.each do |pkg|
 end
 
 Array(node['erlang']['releases']).each do |r|
-  prefix = r['prefix'] || node['erlang']['prefix']
+  release = r['otp_git_ref'] || node['erlang']['otp_git_ref']
   
   cache_path = Chef::Config['file_cache_path']
 
-  erlang "#{prefix}" do
+  erlang "#{release}" do
     git_url r['otp_git_url'] || node['erlang']['otp_git_url']
-    ref r['otp_git_ref'] || node['erlang']['otp_git_ref']
+    prefix r['prefix'] || node['erlang']['prefix']
     skip_apps (r['skip_apps'] || node['erlang']['skip_apps']).join(",")
     config_flags (r['config_flags'] || node['erlang']['config_flags']).join(" ")
   end
