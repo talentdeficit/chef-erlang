@@ -61,9 +61,3 @@ Array(node['erlang']['releases']).each do |r|
     end  
   end
 end
-
-prereqs.each do |pkg|
-  package pkg do
-    action :purge
-  end
-end
