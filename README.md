@@ -11,29 +11,28 @@ attribute list. for example:
 
 ```ruby
 node.default['erlang']['releases'] = [
-	{ 
-    {
-      "version" => "OTP_R16B",
-      "prefix" => "/home/talentdeficit/.erlenv/releases/r16b",
-      "skip_apps" => [
-        "cosTime",
-        "cosEvent",
-        "cosEventDomain",
-        "cosFileTransfer",
-        "cosNotification",
-        "cosProperty",
-        "cosTransactions",
-        "orber"
-      ],
-      "config_flags" => [
-        "--without-javac"
-      ]
-    },
-    {
-      "version" => "OTP_R15B03-1",
-      "prefix" => "/home/talentdeficit/.erlenv/releases/r15b03-1",
-      "rebar" => false
-    }
+  {
+    "otp\_git\_ref" => "OTP_R16B",
+    "prefix" => "/home/talentdeficit/.erlenv/releases/r16b",
+    "skip_apps" => [
+      "cosTime",
+      "cosEvent",
+      "cosEventDomain",
+      "cosFileTransfer",
+      "cosNotification",
+      "cosProperty",
+      "cosTransactions",
+      "orber"
+    ],
+    "config_flags" => [
+      "--without-javac"
+    ]
+  },
+  {
+    "otp\_git\_ref" => "OTP_R15B03-1",
+    "prefix" => "/home/talentdeficit/.erlenv/releases/r15b03-1",
+    "rebar" => false
+  }
 ]
 ```
 
