@@ -12,7 +12,7 @@ attribute list. for example:
 ```ruby
 node.default['erlang']['releases'] = [
   {
-    "otp\_git\_ref" => "OTP_R16B",
+    "otp_git_ref" => "OTP_R16B",
     "prefix" => "/home/talentdeficit/.erlenv/releases/r16b",
     "skip_apps" => [
       "cosTime",
@@ -29,7 +29,7 @@ node.default['erlang']['releases'] = [
     ]
   },
   {
-    "otp\_git\_ref" => "OTP_R15B03-1",
+    "otp_git_ref" => "OTP_R15B03-1",
     "prefix" => "/home/talentdeficit/.erlenv/releases/r15b03-1",
     "rebar" => false
   }
