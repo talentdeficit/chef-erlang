@@ -102,7 +102,7 @@ def prereqs(skip)
   if !(skip.include?("jinterface") && skip.include?("orber") && skip.include?("ic"))
     case node['platform_family']
     when 'debian'
-      p = p + ["default-jdk"]
+      p = p + ["openjdk-7-jre-headless"]
     when 'rhel'
       p = p + ["java-1.6.0-openjdk-devel"]
     end
