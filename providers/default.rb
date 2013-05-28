@@ -34,10 +34,7 @@ action :create do
   user = new_resource.user
   group = new_resource.group
   
-  # skip apps that don't make sense on a server
-  skip_apps = new_resource.skip_apps || node['erlang']['skip_apps']
-  skip_apps = skip_apps + ["appmon", "gs", "observer", "pman", "toolbar", "tv", "wx"]
-  skip_apps = skip_apps.join(",")
+  skip_apps = (new_resource.skip_apps || node['erlang']['skip_apps']).join(",")
   
   cache_path = Chef::Config['file_cache_path']
   
