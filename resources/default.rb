@@ -29,5 +29,6 @@ attribute :git_url, :kind_of => String
 attribute :ref, :kind_of => String, :name_attribute => true
 attribute :skip_apps
 attribute :config_flags
+attribute :prereqs
 attribute :user, :kind_of => String
 attribute :group, :kind_of => String

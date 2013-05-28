@@ -24,24 +24,6 @@
 include_recipe "build-essential"
 include_recipe "git"
 
-prereqs = [
-  "autoconf",
-  "m4",
-  "libncurses5-dev",
-  "libssh-dev",
-  "unixodbc-dev",
-  "libgmp3-dev",
-  "libwxgtk2.8-dev",
-  "libglu1-mesa-dev",
-  "fop",
-  "xsltproc",
-  "default-jdk"
-]
-
-prereqs.each do |pkg|
-  package pkg
-end
-
 Array(node['erlang']['releases']).each do |r|
   release = r['otp_git_ref'] || node['erlang']['otp_git_ref']
   
@@ -50,12 +32,12 @@ Array(node['erlang']['releases']).each do |r|
   erlang "#{release}" do
     git_url r['otp_git_url'] || node['erlang']['otp_git_url']
     prefix r['prefix'] || node['erlang']['prefix']
-    skip_apps (r['skip_apps'] || node['erlang']['skip_apps']).join(",")
-    config_flags (r['config_flags'] || node['erlang']['config_flags']).join(" ")
+    skip_apps r['skip_apps'] || node['erlang']['skip_apps']
+    config_flags r['config_flags'] || node['erlang']['config_flags']
   end
   
   if r['rebar'] || node['erlang']['rebar']
-    rebar "#{prefix}" do
+    erlang_rebar "#{r['prefix'] || node['erlang']['prefix']}" do
       git_url r['rebar_git_url'] || node['erlang']['rebar_git_url']
       ref r['rebar_git_ref'] || node['erlang']['rebar_git_ref']
     end  

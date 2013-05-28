@@ -30,10 +30,14 @@ action :create do
 
   git_url = new_resource.git_url || node['erlang']['otp_git_url']
   ref = new_resource.ref || node['erlang']['otp_git_ref']
-  skip_apps = new_resource.skip_apps || node['erlang']['skip_apps']
-  config_flags = new_resource.config_flags || node['erlang']['config_flags']
+  config_flags = (new_resource.config_flags || node['erlang']['config_flags']).join(" ")
   user = new_resource.user
   group = new_resource.group
+  
+  # skip apps that don't make sense on a server
+  skip_apps = new_resource.skip_apps || node['erlang']['skip_apps']
+  skip_apps = skip_apps + ["appmon", "gs", "observer", "pman", "toolbar", "tv", "wx"]
+  skip_apps.join(",")
   
   cache_path = Chef::Config['file_cache_path']
   
@@ -41,6 +45,12 @@ action :create do
     Chef::Log.info "#{prefix}/bin/erl already exists"
   else
     converge_by("Create #{ref} in #{prefix}") do
+      
+      p = prereqs(skip_apps)
+      
+      p.each do |pkg|
+        package pkg
+      end
       
       git "erlang otp" do
         user user
@@ -82,4 +92,30 @@ action :delete do
       end
     end
   end
+end
+
+def prereqs(skip)
+  p = ["m4"]
+  
+  case node['platform_family']
+  when 'debian'
+    p = p + ["libncurses5-dev", "openssl", "libssl-dev"]
+  when 'rhel'
+    p = p + ["ncurses-devel", "openssl-devel"]
+  end
+  
+  if !(skip.include?("jinterface") && skip.include?("orber") && skip.include?("ic"))
+    case node['platform_family']
+    when 'debian'
+      p = p + ["default-jdk"]
+    when 'rhel'
+      p = p + ["java-1.6.0-openjdk-devel"]
+    end
+  end
+  
+  if !skip.include?("odbc")
+    p = p + ["unixodbc-dev"]
+  end
+  
+  return p
 end

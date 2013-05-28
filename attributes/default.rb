@@ -29,6 +29,8 @@ default['erlang']['rebar_git_url'] = "https://github.com/rebar/rebar"
 default['erlang']['rebar_git_ref'] = "HEAD"
 
 default['erlang']['prefix'] = "/usr/local"
-default['erlang']['skip_apps'] = [""]
-default['erlang']['config_flags'] = [""]
+
+default['erlang']['skip_apps'] = []
+default['erlang']['config_flags'] = []
+
 default['erlang']['rebar'] = false

@@ -27,17 +27,12 @@ license "MIT"
 description "a chef recipe for installing erlang releases"
 version "0.1"
 
-depends "git"
-
 supports "redhat"
 supports "centos"
-supports "fedora"
 supports "amazon"
 supports "scientific"
 supports "debian"
 supports "ubuntu"
-supports "suse"
-supports "mac_os_x"
 
 %w{ build-essential git }.each do |cookbook|
   depends cookbook
