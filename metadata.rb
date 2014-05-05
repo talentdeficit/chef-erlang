@@ -25,7 +25,7 @@ maintainer "alisdair sullivan"
 maintainer_email "alisdairsullivan@yahoo.ca"
 license "MIT"
 description "a chef recipe for installing erlang releases"
-version "0.1"
+version "1.0"
 
 supports "redhat"
 supports "centos"
